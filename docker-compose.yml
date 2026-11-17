@@ -1,0 +1,29 @@
+services:
+  tigerdata:
+    # Tiger Data is Postgres plus TimescaleDB. This image is the same engine, run locally.
+    image: timescale/timescaledb:latest-pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: faze
+      POSTGRES_PASSWORD: faze
+      POSTGRES_DB: faze
+    ports: ["55432:5432"]
+    volumes: ["tiger:/var/lib/postgresql/data"]
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports: ["47017:27017"]
+    volumes: ["mongo:/data/db"]
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis:/data"]
+    restart: unless-stopped
+    ports: ["56379:6379"]
+
+volumes:
+  tiger:
+  mongo:
+  redis:
